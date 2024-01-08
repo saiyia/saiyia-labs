@@ -1,0 +1,62 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:NastyaLab5.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="NastyaLab5.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="MainWindow"
+        Background="SlateGray"
+        WindowStartupLocation="CenterOwner">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+
+    <Grid RowDefinitions="*" ColumnDefinitions="Auto,*">
+
+        <!-- ListBox с шириной 300 пикселей -->
+        <Grid>
+            <Border Background="Black" Opacity="88" Width="300" Height="10000" VerticalAlignment="Top" />
+            <ListBox ItemsSource="{Binding TaskList}"
+                     SelectedItem="{Binding SelectedTask}"
+                     Width="300"
+                     Background="Black">
+                
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="5">
+                            <Grid RowDefinitions="Auto,Auto">
+                                <TextBlock Text="{Binding Title}" FontWeight="Bold" Margin="10" />
+                                <TextBlock Text="{Binding Description}" Margin="10,0,10,10" Grid.Row="1" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+
+
+        <!-- Панель для отображения деталей выбранного элемента -->
+        <StackPanel Grid.Column="1" Margin="10">
+            <TextBlock Text="{Binding SelectedTask.Title, FallbackValue='Задача не выбрана'}"
+                       FontWeight="Bold" FontSize="36" Margin="10,0,0,15" />
+            <Rectangle Width="800" Height="2" Fill="Black" Margin="10,0,0,15" HorizontalAlignment="Left" />
+            <TextBlock Text="{Binding SelectedTask.Description, FallbackValue='Выберите элемент в списке слева.'}"
+                       FontSize="26" Margin="10,0,0,10" />
+            <TextBlock Text="{Binding SelectedTask.Deadline}" FontSize="26" Margin="10,0,0,10" />
+            <TextBlock Text="{Binding SelectedTask.Tags}" FontSize="26" Margin="10,0,0,25" />
+            <Button Content="Редактировать" IsVisible="{Binding IsSelected}" Command="{Binding ShowEditTaskDialog}"
+                    Margin="10,0,0,25" />
+            <Button Content="Добавить задачу" Command="{Binding ShowAddTaskDialog}"
+                    Margin="10,0,0,25" />
+        </StackPanel>
+    </Grid>
+
+
+</Window>
